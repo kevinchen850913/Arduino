@@ -6,6 +6,7 @@ volatile boolean process;
 void setup (void) {
    Serial.begin (115200);
    pinMode(MISO, OUTPUT); // have to send on master in so it set as output
+   SPCR |= (1<<CPHA); //設定模式2
    SPCR |= _BV(SPE); // turn on SPI in slave mode
    indx = 0; // buffer empty
    process = false;
@@ -25,15 +26,12 @@ void loop (void) {
       process = false; //reset the process
       for(int i = 0;i<indx;i++)
       {
-        if(i%4==0)
+        Serial.print (".");
+        if(i%3==0)
         {
           Serial.println (" ");
         }
         Serial.print (buff[i],HEX);
-        if(buff[i]<10)
-        {
-          Serial.print ("0");
-        }
       }
       indx= 0; //reset button to zero
    }
